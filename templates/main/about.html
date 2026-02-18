@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold text-primary mb-4">About the Project</h1>
+                <p class="lead">Skincare AI Nexus is a next-generation healthcare solution that leverages deep learning
+                    to provide instant skin disease assessments.</p>
+                <p>Our platform uses the highly efficient VGG16 Convolutional Neural Network, pre-trained on millions of
+                    images and fine-tuned specifically for dermatological conditions. By automating the screening
+                    process, we aim to provide early detection support for critical conditions like Melanoma while
+                    offering guidance for minor conditions.</p>
+            </div>
+            <div class="col-lg-6 px-lg-5">
+                <div class="glass-card">
+                    <h5 class="mb-4">System Specifications</h5>
+                    <ul class="list-group list-group-flush bg-transparent">
+                        <li class="list-group-item bg-transparent text-inherit d-flex justify-content-between">
+                            <span>Architecture:</span> <span class="fw-bold">CNN (VGG16)</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-inherit d-flex justify-content-between">
+                            <span>Target Classes:</span> <span class="fw-bold">7 Skin Diseases</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-inherit d-flex justify-content-between">
+                            <span>Image Size:</span> <span class="fw-bold">224 x 224 (RGB)</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-inherit d-flex justify-content-between">
+                            <span>Optimizer:</span> <span class="fw-bold">Adam</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-inherit d-flex justify-content-between">
+                            <span>Loss Function:</span> <span class="fw-bold">Categorical Crossentropy</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="glass-card text-center h-100">
+                    <h2 class="display-6 fw-bold text-primary">92%</h2>
+                    <p class="mb-0">Validation Accuracy</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass-card text-center h-100">
+                    <h2 class="display-6 fw-bold text-primary">7</h2>
+                    <p class="mb-0">Unique Disease Classes</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass-card text-center h-100">
+                    <h2 class="display-6 fw-bold text-primary">
+                        < 2s</h2>
+                            <p class="mb-0">Inference Speed</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass-card text-center h-100">
+                    <h2 class="display-6 fw-bold text-primary">24/7</h2>
+                    <p class="mb-0">AI Chatbot Availability</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card mt-5">
+            <h3 class="mb-4">Medical Disclaimer</h3>
+            <p class="small text-muted">The analysis provided by Skincare AI Nexus is for educational and screening
+                purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always
+                seek the advice of your physician or other qualified health provider with any questions you may have
+                regarding a medical condition. Never disregard professional medical advice or delay in seeking it
+                because of something you have read or seen on this application.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

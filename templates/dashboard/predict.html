@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="portal-layout">
+    <aside class="portal-sidebar">
+        <div class="mb-5 px-3">
+            <h6 class="text-uppercase small fw-bold text-muted mb-4">Portal Menu</h6>
+            <a href="{{ url_for('dashboard') }}" class="sidebar-link">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a href="{{ url_for('predict') }}" class="sidebar-link active">
+                <i class="fas fa-microscope"></i> New Analysis
+            </a>
+            <a href="{{ url_for('chatbot') }}" class="sidebar-link">
+                <i class="fas fa-stethoscope"></i> AI specialist
+            </a>
+            <a href="{{ url_for('history') }}" class="sidebar-link">
+                <i class="fas fa-folder-open"></i> Clinical History
+            </a>
+        </div>
+    </aside>
+
+    <main class="p-4 p-lg-5">
+        <div class="mb-5">
+            <h1 class="h2">New Clinical Screening</h1>
+            <p class="text-muted">Upload high-resolution dermatoscopic or clinical imagery for neural analysis.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-xl-8">
+                <div class="analysis-surface text-center">
+                    <form action="{{ url_for('predict') }}" method="POST" enctype="multipart/form-data"
+                        id="predictionForm">
+                        <div class="mb-5">
+                            <label for="imageUpload" style="cursor: pointer; width: 100%;">
+                                <div class="nexus-card py-5 border-dashed"
+                                    style="border: 2px dashed var(--medical-border); background: #fdfdfe;">
+                                    <div class="mb-4">
+                                        <div class="mx-auto bg-primary-soft rounded-circle d-flex align-items-center justify-content-center"
+                                            style="width: 80px; height: 80px;">
+                                            <i class="fas fa-cloud-arrow-up fa-2x text-primary"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="h4">Clinical Image Upload</h3>
+                                    <p class="text-muted">Drag & drop or <span
+                                            class="text-primary fw-bold">browse</span> your local archive.<br>Supports
+                                        JPG, PNG, and DICOM-compatible formats.</p>
+                                </div>
+                            </label>
+                            <input type="file" name="image" id="imageUpload" class="d-none" accept="image/*" required>
+                        </div>
+
+                        <div id="imagePreview" class="mb-5 d-none animate-up">
+                            <div class="img-frame mx-auto shadow-lg"
+                                style="max-width: 500px; height: auto; aspect-ratio: auto;">
+                                <img src="#" alt="Patient Sample" class="rounded-4">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-clinical btn-lg w-100 py-3" id="predictBtn" disabled>
+                            Initialize Neural Pipeline <i class="fas fa-dna ms-2"></i>
+                        </button>
+                    </form>
+
+                    <div id="loader" class="mt-5 p-4 text-center d-none">
+                        <div class="spinner-grow text-primary mb-3" role="status"></div>
+                        <h4 class="h5">Analyzing Tissue Patterns</h4>
+                        <p class="text-muted small">Cross-referencing with 4.2M clinical data points...</p>
+                    </div>
+                </div>
+
+                <div class="mt-5 p-4 nexus-card" style="background: #fff9f0; border-color: #ffedd5;">
+                    <div class="d-flex gap-3">
+                        <i class="fas fa-lightbulb text-warning fs-4"></i>
+                        <div>
+                            <h5 class="h6 fw-bold">Best Practices for Imaging</h5>
+                            <p class="small text-muted mb-0">For optimal accuracy, ensure clinical samples are well-lit,
+                                in focus, and isolated from surrounding background noise.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const imageUpload = document.getElementById('imageUpload');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = imagePreview.querySelector('img');
+    const predictBtn = document.getElementById('predictBtn');
+    const predictionForm = document.getElementById('predictionForm');
+    const loader = document.getElementById('loader');
+
+    imageUpload.addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+                imagePreview.classList.remove('d-none');
+                predictBtn.disabled = false;
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+
+    predictionForm.addEventListener('submit', function () {
+        predictBtn.classList.add('d-none');
+        loader.classList.remove('d-none');
+    });
+</script>
+{% endblock %}

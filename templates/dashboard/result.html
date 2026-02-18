@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="portal-layout">
+    <aside class="portal-sidebar">
+        <div class="mb-5 px-3">
+            <h6 class="text-uppercase small fw-bold text-muted mb-4">Portal Menu</h6>
+            <a href="{{ url_for('dashboard') }}" class="sidebar-link">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a href="{{ url_for('predict') }}" class="sidebar-link active">
+                <i class="fas fa-microscope"></i> New Analysis
+            </a>
+            <a href="{{ url_for('chatbot') }}" class="sidebar-link">
+                <i class="fas fa-stethoscope"></i> AI specialist
+            </a>
+            <a href="{{ url_for('history') }}" class="sidebar-link">
+                <i class="fas fa-folder-open"></i> Clinical History
+            </a>
+        </div>
+    </aside>
+
+    <main class="p-4 p-lg-5">
+        <div class="d-flex justify-content-between align-items-start mb-5">
+            <div>
+                <h1 class="h2">Detailed Analysis Report</h1>
+                <p class="text-muted">Analysis ID: #PRD-{{ prediction.id }} | Generated on {{
+                    prediction.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('download_report', id=prediction.id) }}" class="btn-clinical">
+                    <i class="fas fa-file-pdf me-2"></i> Export Report
+                </a>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="nexus-card p-0 overflow-hidden mb-4">
+                    <div style="aspect-ratio: 1/1;">
+                        <img src="/{{ prediction.image_path }}" class="w-100 h-100 object-fit-cover"
+                            alt="Clinical Sample">
+                    </div>
+                </div>
+
+                <div class="nexus-card">
+                    <h5 class="h6 text-muted text-uppercase fw-bold mb-4">Key Diagnostic Metrics</h5>
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                        <span class="text-muted">Detected Pathogen</span>
+                        <span class="fw-bold">{{ prediction.predicted_class }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                        <span class="text-muted">Confidence Index</span>
+                        <span class="fw-bold text-primary">{{ "%.2f"|format(prediction.confidence) }}%</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Risk Category</span>
+                        <span
+                            class="result-badge {% if prediction.confidence > 90 %}badge-risk-high{% else %}badge-risk-low{% endif %}">
+                            <i class="fas fa-shield-virus"></i> Clinical Focus
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="nexus-card mb-4" style="border-left: 6px solid var(--primary);">
+                    <h4 class="mb-4">Pathology Description</h4>
+                    <p class="text-muted mb-5" style="font-size: 1.1rem; line-height: 1.8;">
+                        {{ prediction.description }}
+                    </p>
+
+                    <h5 class="h6 fw-bold text-danger text-uppercase mb-3">Physician's Action Plan</h5>
+                    <div class="p-4 rounded-4 bg-light d-flex gap-3 align-items-start">
+                        <i class="fas fa-user-md text-primary fs-4"></i>
+                        <p class="mb-0 fw-bold" style="color: #1e293b;">
+                            {{ prediction.suggested_action }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="nexus-card">
+                    <h4 class="mb-4">Probability Distribution Across Classes</h4>
+                    <div style="height: 300px;">
+                        <canvas id="probChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('probChart').getContext('2d');
+    const classes = ['Actinic Keratosis', 'Basal Cell Carcinoma', 'Dermatofibroma', 'Melanoma', 'Nevus', 'Pigmented Benign Keratosis', 'Squamous Cell Carcinoma'];
+    const currentClass = "{{ prediction.predicted_class }}";
+    const confidence = parseFloat("{{ prediction.confidence }}");
+
+    const data = classes.map(c => {
+        if (c === currentClass) return confidence;
+        return (100 - confidence) / (classes.length - 1);
+    });
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: classes,
+            datasets: [{
+                label: 'Confidence level (%)',
+                data: data,
+                backgroundColor: classes.map(c => c === currentClass ? '#2563eb' : '#e2e8f0'),
+                borderRadius: 8,
+                barThickness: 16
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            maintainAspectRatio: false,
+            scales: {
+                x: { display: false, max: 100 },
+                y: { grid: { display: false }, ticks: { font: { weight: '600', size: 10 } } }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,16 @@
+flask
+flask-sqlalchemy
+flask-login
+flask-bcrypt
+mysql-connector-python
+tensorflow
+keras
+numpy
+pandas
+opencv-python
+pillow
+matplotlib
+fpdf
+scikit-learn
+flask-migrate
+python-dotenv

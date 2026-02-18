@@ -1,0 +1,31 @@
+CREATE DATABASE IF NOT EXISTS skincare_nexus;
+USE skincare_nexus;
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS predictions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    image_path VARCHAR(255) NOT NULL,
+    predicted_class VARCHAR(100) NOT NULL,
+    confidence FLOAT NOT NULL,
+    description TEXT,
+    suggested_action VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS chats (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    message TEXT NOT NULL,
+    response TEXT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

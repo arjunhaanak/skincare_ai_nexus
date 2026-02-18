@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="portal-layout">
+    <aside class="portal-sidebar">
+        <div class="mb-5 px-3">
+            <h6 class="text-uppercase small fw-bold text-muted mb-4">Portal Menu</h6>
+            <a href="{{ url_for('dashboard') }}" class="sidebar-link">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a href="{{ url_for('predict') }}" class="sidebar-link">
+                <i class="fas fa-microscope"></i> New Analysis
+            </a>
+            <a href="{{ url_for('chatbot') }}" class="sidebar-link">
+                <i class="fas fa-stethoscope"></i> AI specialist
+            </a>
+            <a href="{{ url_for('history') }}" class="sidebar-link active">
+                <i class="fas fa-folder-open"></i> Clinical History
+            </a>
+        </div>
+    </aside>
+
+    <main class="p-4 p-lg-5">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h1 class="h2">Patient Record Archive</h1>
+                <p class="text-muted">A secure digital log of all historical clinical skin assessments.</p>
+            </div>
+        </div>
+
+        {% if predictions %}
+        <div class="row g-4">
+            {% for pred in predictions %}
+            <div class="col-md-6 col-xl-4 animate-up">
+                <div class="nexus-card p-0 overflow-hidden d-flex flex-column h-100">
+                    <div class="img-frame" style="height: 200px; border-radius: 0;">
+                        <img src="/{{ pred.image_path }}" alt="Scan Record">
+                    </div>
+                    <div class="p-4 flex-grow-1 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h5 class="mb-1">{{ pred.predicted_class }}</h5>
+                                <span class="small text-muted">{{ pred.created_at.strftime('%B %d, %Y') }}</span>
+                            </div>
+                            <span class="badge rounded-pill bg-primary-soft text-primary px-3">{{
+                                "%.1f"|format(pred.confidence) }}%</span>
+                        </div>
+                        <p class="small text-muted mb-4"
+                            style="display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                            {{ pred.description }}
+                        </p>
+                        <div class="mt-auto d-flex gap-2">
+                            <a href="{{ url_for('result') }}" class="btn-clinical py-2 px-3 small w-100"
+                                style="font-size: 0.85rem;">
+                                Full Diagnosis
+                            </a>
+                            <a href="{{ url_for('download_report', id=pred.id) }}"
+                                class="btn-clinical-outline py-2 px-3 small" style="font-size: 0.85rem;">
+                                <i class="fas fa-file-pdf"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="nexus-card text-center py-5 mt-5">
+            <div class="mb-4 bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                style="width: 100px; height: 100px;">
+                <i class="fas fa-folder-open fa-3x text-muted"></i>
+            </div>
+            <h3 class="h4">Clinical Archive is Empty</h3>
+            <p class="text-muted">No historical data available for retrieval.</p>
+            <a href="{{ url_for('predict') }}" class="btn-clinical mt-4">Begin First Patient Scan</a>
+        </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

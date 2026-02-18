@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="portal-layout">
+    <aside class="portal-sidebar">
+        <div class="mb-5 px-3">
+            <h6 class="text-uppercase small fw-bold text-muted mb-4">Portal Menu</h6>
+            <a href="{{ url_for('dashboard') }}" class="sidebar-link">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a href="{{ url_for('predict') }}" class="sidebar-link">
+                <i class="fas fa-microscope"></i> New Analysis
+            </a>
+            <a href="{{ url_for('chatbot') }}" class="sidebar-link active">
+                <i class="fas fa-stethoscope"></i> AI specialist
+            </a>
+            <a href="{{ url_for('history') }}" class="sidebar-link">
+                <i class="fas fa-folder-open"></i> Clinical History
+            </a>
+        </div>
+    </aside>
+
+    <main class="p-4 p-lg-5">
+        <div class="mb-5">
+            <h1 class="h2">AI Clinical Specialist</h1>
+            <p class="text-muted">Direct interface with Nexus Neural Chat for real-time diagnostic inquiry and medical
+                insights.</p>
+        </div>
+
+        <div class="nexus-card p-0 overflow-hidden d-flex flex-column" style="height: 65vh; background: #ffffff;">
+            <div id="chatContainer" class="p-4 flex-grow-1"
+                style="overflow-y: auto; display: flex; flex-direction: column; gap: 1rem;">
+                <div class="bubble bubble-physician animate-up">
+                    <p class="mb-0">Greetings, Dr. {{ current_user.name.split(' ')[0] }}. I am the Nexus AI assistant.
+                        How may I assist your dermatological inquiry today?</p>
+                </div>
+                {% for chat in chats %}
+                <div class="bubble bubble-user animate-up">
+                    <p class="mb-0">{{ chat.message }}</p>
+                </div>
+                <div class="bubble bubble-physician animate-up">
+                    <p class="mb-0">{{ chat.response }}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="p-4 bg-light border-top">
+                <form id="chatForm" class="d-flex gap-3">
+                    <input type="text" id="userInput" class="form-control py-3 px-4 border-0 shadow-sm rounded-4"
+                        placeholder="Request clinical insight..." required>
+                    <button type="submit"
+                        class="btn-clinical rounded-circle p-0 d-flex align-items-center justify-content-center"
+                        style="width: 56px; height: 56px; flex-shrink: 0;">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const chatForm = document.getElementById('chatForm');
+    const userInput = document.getElementById('userInput');
+    const chatContainer = document.getElementById('chatContainer');
+
+    function scrollToBottom() {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    scrollToBottom();
+
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msg = userInput.value;
+        if (!msg) return;
+
+        const userDiv = document.createElement('div');
+        userDiv.className = 'bubble bubble-user animate-up';
+        userDiv.innerHTML = `<p class="mb-0">${msg}</p>`;
+        chatContainer.appendChild(userDiv);
+
+        userInput.value = '';
+        scrollToBottom();
+
+        const response = await fetch("{{ url_for('chatbot') }}", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: msg })
+        });
+        const data = await response.json();
+
+        const botDiv = document.createElement('div');
+        botDiv.className = 'bubble bubble-physician animate-up';
+        botDiv.innerHTML = `<p class="mb-0">${data.response}</p>`;
+        chatContainer.appendChild(botDiv);
+
+        scrollToBottom();
+    });
+</script>
+{% endblock %}
