@@ -14,3 +14,7 @@ fpdf
 scikit-learn
 flask-migrate
 python-dotenv
+flask-wtf
+flask-talisman
+google-generativeai
+email-validator

@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+
+# Flask
+instance/
+.webassets-cache
+skincare_nexus.db
+
+# Uploads & Models
+uploads/*
+!uploads/.gitkeep
+models/*.h5
+models/*.tflite
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

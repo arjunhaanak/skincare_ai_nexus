@@ -9,23 +9,15 @@ Skincare AI Nexus is a premium, clinical-grade web application designed for high
 
 ---
 
-## 💎 Premium Clinical Features
+### 🧠 Nexus Intelligence (New)
+- **Generative AI Specialist**: Integrated Google Gemini AI for advanced, contextual medical conversations.
+- **Dynamic Risk Analytics**: Real-time patient data visualization powered by Chart.js.
+- **Clinical Dark Mode**: Premium, low-eye-strain theme for official laboratory usage.
 
-### 🔬 Neural Diagnostic Engine
-- **7-Class Classification**: Specialized detection for Melanoma, Basal Cell Carcinoma, Actinic Keratosis, and more.
-- **High-Inference Speed**: Analysis pipeline optimized for <1.2s processing.
-- **Clinical Pathometrics**: Provides deep medical insights including Pathophysiology, Symptom Checklists, and surgical protocols.
-
-### 👨‍⚕️ Advanced Doctor's Portal
-- **Professional Dashboard**: A side-bar driven medical interface designed for specialists.
-- **AI Clinical Specialist**: Context-aware NLP chatbot for technical medical inquiries.
-- **Automated Documentation**: Instant generation of professional PDF reports with clinical action plans.
-- **Visual Analytics**: Interactive probability distribution charts powered by Chart.js.
-
-### 📱 Full Device Integration (PWA)
-- **Standalone App**: Install Nexus directly to your Desktop or Mobile home screen.
-- **Service Worker Core**: Advanced caching for rapid load times and offline manifest support.
-- **Responsive Layout**: Designed for ultra-wide clinical monitors and handheld devices.
+### 🛡️ Enterprise Security
+- **CSRF Protection**: System-wide protection for automated bot prevention.
+- **Secure Clinical Headers**: Integrated Flask-Talisman for HSTS, CSP, and XSS protection.
+- **Production Config**: Environment-based configuration for high-security environments.
 
 ---
 

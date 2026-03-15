@@ -18,6 +18,16 @@
     --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+[data-theme="dark"] {
+    --medical-bg: #0f172a;
+    --medical-surface: #1e293b;
+    --medical-text: #f8fafc;
+    --medical-text-muted: #94a3b8;
+    --medical-border: #334155;
+    --glass: rgba(30, 41, 59, 0.85);
+    --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
 * {
     margin: 0;
     padding: 0;
